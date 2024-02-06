@@ -27,7 +27,7 @@ des liens vers la documentation.
 * Oui le projet est bien documenté, tout est précisé, pas seulement les parametres et le return.
 De plus dans le UserGuide, il y a des exemples d'utilisation de la bibliothèque, avec la classe depuis laquelle tout démarre (Gson)
 ainsi que la méthode qui est invoqué en premier.
-Grace à metrics (outil d'analyse ) on constate que le projet est couvert en documentation à 80%
+Grace à metrics (outil d'analyse ) on constate que le projet est couvert en documentation à 80%.
 
 
 
