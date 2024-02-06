@@ -1,4 +1,5 @@
-# Gson User Guide
+
+ Gson User Guide
 
 1. [Overview](#overview)
 2. [Goals for Gson](#goals-for-gson)
@@ -41,7 +42,6 @@
 Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object.
 
 Gson can work with arbitrary Java objects including pre-existing objects that you do not have source code of.
-
 ## Goals for Gson
 
 * Provide easy to use mechanisms like `toString()` and constructor (factory method) to convert Java to JSON and vice-versa
