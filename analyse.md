@@ -28,7 +28,9 @@ des liens vers la documentation.
 * Oui le projet est bien documenté, tout est précisé, pas seulement les parametres et le return.
 De plus dans le UserGuide, il y a des exemples d'utilisation de la bibliothèque, avec la classe depuis laquelle tout démarre (Gson)
 ainsi que la méthode qui est invoqué en premier.
-Grace à metrics (outil d'analyse ) on constate que le projet est couvert en documentation à 80%  
+Grace à metrics (outil d'analyse ) on constate que le projet est couvert en documentation à 80% , il reste à vérifier que celui-ci aide réellement à la 
+compréhension des méthodes les plus complexes, et qu'elles ne sont pas juste la pour spécifier les types des paramètres et des returns  
+On pourrait ainsi développer la documentation sur certaines méthodes qui ne sont pas explicites et réduire la ou elle encombre plus le code qu'autre chose.
 
 # Présentation globale du projet  
 
@@ -49,9 +51,31 @@ Ainsi, on ne retrouve personne qui est encore actif et qui a suivi l'intégralit
 
 ## Utilisation de bibliothèques extérieures  
 
+* Nous comptons 3 bibliotheques exterieures qui sont toutes utilisees. Cependant dans certaines classes les imports ne sont pas
+justifiés et pourraient donc être supprimés pour avoir un code plus propre et lisible.  
+
+  * Ces 3 bibliothèques font des choses différentes et sont donc justifiés et aucune d'elle ne peut être supprimée.
+
+## Organisation en paquetage
+
+* Nous avons découvert grace a dependency metrics dans intellij que certains packages/classes étaient dépendants les uns des autres 
+de façon cyclique. Cela peut engendrer des difficultes de compréhension, et donc repérer les erreurs, cela augmente la difficultés de pouvoir 
+isoler certaines fonctionnalités. Cela peut également rendre plus difficile la gestion des tests unitaires et de réfactorisation de code car tout sera lié.  
+
+Il faudrait ainsi minimiser les cycles de dépendances, on peut par exemple imaginer l'utilisation de design pattern qui restructureraient la code.  
 
 
 
 
 
 
+attention : 
+couverture test
+couverture docs 
+code commentée ?
+methodes mal commentes qu'on comprend pas
+readme peut etre developpee
+nom des methodes/classes/packages pas explicites
+nombres magiques 
+noms de variables pas explicites
+classe trop grande
