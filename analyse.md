@@ -64,12 +64,38 @@ isoler certaines fonctionnalités. Cela peut également rendre plus difficile la
 
 Il faudrait ainsi minimiser les cycles de dépendances, on peut par exemple imaginer l'utilisation de design pattern qui restructureraient la code.  
 
+* Dans le coeur du projet (le dossier gson) il n'y a aucun paquetage ne contenant qu'un seul paquetage sans aucune classe, cependant nous en avons remarqué quelques uns ayant ce comportement (exemple le paquetage gson/src/main/java-templates), cependant il ne semble pas pertinent de le réfactorer car cette hiérarchie bien que plus lourde est essentiellement structurelle et permet de maintenir une bonne cohérence de code. Cela est aussi positif pour l'extensibilité.
+
+* Pour ce qui est des noms de paquetages -> ils sont relativement intuitifs, ce qui rend le projet accessibles pour des personnes inconnus à celui-ci, cela facilite aussi la recherche de certaines classes ou fonctionnalités ou encore la compréhension des roles des différents paquetages.
+Certains d'entre eux nous donnent des infos sur le lien avec la base de donnée ( exemple gson/src/main/java/com.google.gson/internal/sql)
+Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'ils implementent (on parle d'organisation métiers ), pas de lien avec les design patterns utilisées ou des modeles de conception partciculiers.
+
+## Répartition des classes dans les répartitions  
+
+* Au total il y a 84 fichiers (commande ds fichier gson/src/main/java/com.google.gson "$find . -type f | wc -l") cela peut être des classes, des enums ou des interfaces.
+ Avec un minimum de 1 classe (dans le paquetage gson/src/main/java/internal/bind/util) et un maximum de 30 (gson/src/main/java/com.google.gson), on a une moyenne d'environ 9 classes par paquetage (cependant l'écart type est très grand -> moyenne n'est pas très indicative).
+
+ il serait envisageable de regrouper certaines de ces classes dans de nouveaux sous paquetages pour que le gros paquetage de 30 classes soit moins surchagé. 
+
+* On remarque que une grande majorité des classes de code se trouvent un même paquetage (le paquetage gson/src/main/java/com.google.gson) -> une bonne pratique serait de mieux répartir les nombres de classes dans les paquetages.
+ 
+* Plusieurs paquetages non feuilles contiennent des classes (exemple gson/src/main/java/com.google.gson ou encore gson/src/main/java/internal ou gson/src/main/java/internal/bind) ,cela n'est pas forcément une mauvaise chose et peut permettre de réduire la complexité de la structure, d'offrir des mêmes fonctionnalités à plusieurs sous paquetages. En inconvénient,  cela peut diminuer la cohérence de regroupement des fonctionnalités et créer des dépendances inutiles entre les autres sous paquetages.
+
+* Dans la classes Excluder.java (qui se trouve dans le paquetage internal), on retrouve des imports des paquetages "annotation", "internal.reflect", ou encore "stream".
+  
+* couplage : Peu de dépendances entre les classes et paquetages est préfèrable pour rendre le projet plus extensible et facilement modifiable car les parties sont plus indépendantes les unes des autres.
+
+
+## Organisation des classes  
+
 
 
 
 
 
 attention : 
+methodes publiques dans methodes privées
+probleme nom methodes att (exemple convention majuscules att statiques tt ca)
 couverture test
 couverture docs 
 code commentée ?
