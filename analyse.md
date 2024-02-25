@@ -70,7 +70,7 @@ Il faudrait ainsi minimiser les cycles de dépendances, on peut par exemple imag
 Certains d'entre eux nous donnent des infos sur le lien avec la base de donnée ( exemple gson/src/main/java/com.google.gson/internal/sql)
 Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'ils implementent (on parle d'organisation métiers ), pas de lien avec les design patterns utilisées ou des modeles de conception partciculiers.
 
-## Répartition des classes dans les répartitions  
+## Répartition des classes dans les paquetages    
 
 * Au total il y a 84 fichiers (commande ds fichier gson/src/main/java/com.google.gson "$find . -type f | wc -l") cela peut être des classes, des enums ou des interfaces.
  Avec un minimum de 1 classe (dans le paquetage gson/src/main/java/internal/bind/util) et un maximum de 30 (gson/src/main/java/com.google.gson), on a une moyenne d'environ 9 classes par paquetage (cependant l'écart type est très grand -> moyenne n'est pas très indicative).
@@ -87,6 +87,18 @@ Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'il
 
 
 ## Organisation des classes  
+
+* Après avoir affiché le diagramme uml qui montre les liens d'héritage entre les classes, on remarque une DIT très minime, avec une profondeur maximale de 2 ( TreeTypeAdaptator hérite de SerializationDelegatingTypeAdaptator qui hérite de TypeAdaptator ). On voit qu'il y a un max d'enfants de 9 pour les enfants de TypeAdaptator et un min de 1 (exemple l'enfant de la classe JsonWriter).
+
+* A part pour la classe type Adapatator qui a 9 enfants, sinon on retrouve très peu d'héritage de classe, et celle-ci est donc plutot plate avec une profondeur maximum de 2.
+
+* Une hiérarchie aussi plate participe ainsi au fait qu'il y ait moins de couplage entre les différentes parties du code. Plus une classe a un couplage faible plus elle est considérée comme stable, la dépendance de cette classe avec les autres est minimale.
+  
+* On peut ainsi facilimer modifier le code d'une classe sans que cela impacte les autres.  
+  
+* Cela rend également les tests plus faciles, avec la créations de tests unitaires independants les uns des autres.
+
+* Avec un couplage plus faible le projet est plus compréhensible, chaque classe a une responsabilité claire et on peut plus facilement réutiliser les différentes parties de code.
 
 
 
