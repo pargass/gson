@@ -100,6 +100,30 @@ Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'il
 
 * Avec un couplage plus faible le projet est plus compréhensible, chaque classe a une responsabilité claire et on peut plus facilement réutiliser les différentes parties de code.
 
+# Analyse approfondie
+
+## Tests 
+
+* pour compter les classes de test : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | wc -l
+il y a 112 classes de test, ce qui est un nombre conséquent et qui montre que le projet est bien testé.
+
+pour compter les tests : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -o '@Test' | wc -l
+il y a 1332 tests.
+
+pour compter les assertions : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -E 'assertThat|assertEquals|assertTrue|assertNotNull|assertThrows|fail' | wc -l
+il y a 3372 assertions.
+
+chaque test compte en moyenne environ 2.53 assertions
+
+
+# REMARQUES 
+
+magic number : JsonPrimitive : ligne 260, 265, 269 (à remplacer avec des constantes)
+
+code commenté : TypeAdapter : ligne 250 à 290 (à supprimer)
+                TypeAdapterFactory : partout (à supprimer)
+
+
 
 
 
@@ -117,3 +141,5 @@ nom des methodes/classes/packages pas explicites
 nombres magiques 
 noms de variables pas explicites
 classe trop grande
+regarder si des methodes annotees avec @Deprecated sont encore utilisees et les remplacer par ce qui est écrits dans la doc de cette annotation
+doc non pertinente
