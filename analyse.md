@@ -146,7 +146,7 @@ il y a 3372 assertions.
 
 ## Règle de nommage   
 
-* 
+* Le projet utilise des bons noms partout qui définissent toujours la fonctionnalité de la méthode -> exemples (isCapturingTypeVariablesForbidden dans la classe TYpeToken ou encore excludeFieldsWithModifiers dans la classe GsonBuilder), nous n'en avons pas trouvé à modifier.
 
 ## Nombre magique  
 
@@ -156,7 +156,9 @@ il y a 3372 assertions.
 
 ## Structure du code  
 
-## Code mort 
+## Code mort  
+
+* Nous avons pu trouver du code mort : la fonction "excluder" à la ligne 417 de la classe Gson.Java , celle-ci n'est appelé nulle part et pourrait donc être supprimée afin de nettoyer encore plus le code et le rendre plus lisible. De plus il est Deprecated (obsolète), raison de plus pour le supprimer. Celui-ci est testé.
 
 
 # REMARQUES 
