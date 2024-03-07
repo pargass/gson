@@ -70,6 +70,8 @@ Il faudrait ainsi minimiser les cycles de dépendances, on peut par exemple imag
 Certains d'entre eux nous donnent des infos sur le lien avec la base de donnée ( exemple gson/src/main/java/com.google.gson/internal/sql)
 Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'ils implementent (on parle d'organisation métiers ), pas de lien avec les design patterns utilisées ou des modeles de conception partciculiers.
 
+* Enfin nous avons remarqué que les classes exceptions ne se trouvaient pas dans un paquetage spécifiques mais avec toutes les autres classes du projet.
+
 ## Répartition des classes dans les paquetages    
 
 * Au total il y a 84 fichiers (commande ds fichier gson/src/main/java/com.google.gson "$find . -type f | wc -l") cela peut être des classes, des enums ou des interfaces.
@@ -104,16 +106,57 @@ Nonobstant, les paquetages sont souvent nommés selon les fonctionnalités qu'il
 
 ## Tests 
 
-* pour compter les classes de test : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | wc -l
+* pour compter les classes de test : /IdeaProjects/gson/gson/src/test`$ find . -type f -name "*Test.java" -o -name "*Tests.java" | wc -l`
 il y a 112 classes de test, ce qui est un nombre conséquent et qui montre que le projet est bien testé.
 
-pour compter les tests : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -o '@Test' | wc -l
+* pour compter les tests : /IdeaProjects/gson/gson/src/test`$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -o '@Test' | wc -l`
 il y a 1332 tests.
 
-pour compter les assertions : /IdeaProjects/gson/gson/src/test$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -E 'assertThat|assertEquals|assertTrue|assertNotNull|assertThrows|fail' | wc -l
+* pour compter les assertions : /IdeaProjects/gson/gson/src/test`$ find . -type f -name "*Test.java" -o -name "*Tests.java" | xargs grep -E 'assertThat|assertEquals|assertTrue|assertNotNull|assertThrows|fail' | wc -l`
 il y a 3372 assertions.
 
-chaque test compte en moyenne environ 2.53 assertions
+* chaque test compte en moyenne environ 2.53 assertions -> ce qui semble être bien car cela signifie qu'il y a possiblement plusieurs post conditions qui sont testées à chaqeu fois.
+
+ On remarque que presque toutes les assertions sont des assertThat, il pourrait être enviseageable de les diversifier.  
+ 
+* la grande majorité des tests sont des tests unitaires -> bonne pratique, chaque fonctionnalité est testée
+* Tous les tests du projet passent avec succès  
+
+
+## Commentaires
+
+* On peut remarquer qu'il existe du code commenté qui pourrait donc être supprimé pour nettoyer le projet de lignes inutiles -> par exemple à la classe TypeAdapter : ligne 250 à 290 (à supprimer) et TypeAdapterFactory : partout (à supprimer)
+  
+* Il y a également parfois certains commentaires qui ne sont pas necessaires et qui reprennent simplement le nom de l'attribut. Par exemple dans la classe stream.JsonReader.java ligne 278 (peekedNumberLenght).
+
+* Il y a environ 1600 lignes de codes de commentaire ( trouvée avec la ligne de commande : `$ find . -name "*.java" -print0 | xargs -0 grep -E '^\s*//|^\s*/\*|^\s*\*/' | wc -l`)
+
+* Le projet est très commenté en général et il est difficile de trouver une seule méthode qui n'est pas expliqué en commentaire. Certaines parties plus techniques pourraient cependant mieux détaillé pour qu'une personne extérieure au projet comprennent encore plus facilement.
+
+## Dépréciation  
+
+## Dupplication de code  
+
+## God classes  
+
+## Analyse des méthodes  
+
+
+# Nettoyage de Code et Code smells  
+
+## Règle de nommage   
+
+* 
+
+## Nombre magique  
+
+* Nous avons pu trouver des nombres magique dans le code par exemple : JsonPrimitive : ligne 260, 265, 269. Cela augmente les risques d'erreur (faute de frappe par exemple), le code est plus difficile à tester et il est moins clair à comprendre ( on ne sait pas à quoi correspondent les valeurs )
+  
+* Ces nombre pourraient être remplacées par des constantes initialisées au début de la classe.
+
+## Structure du code  
+
+## Code mort 
 
 
 # REMARQUES 
