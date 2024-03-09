@@ -134,12 +134,51 @@ il y a 3372 assertions.
 * Le projet est très commenté en général et il est difficile de trouver une seule méthode qui n'est pas expliqué en commentaire. Certaines parties plus techniques pourraient cependant mieux détaillé pour qu'une personne extérieure au projet comprennent encore plus facilement.
 
 ## Dépréciation  
+  
+* il y a une méthode dépréciée dans la classe JsonWriter à la ligne 312, setLenint(). Elle est appelée uniquement par une méthode de test. Il est préférable de remplacer les appels à cette méthode par la méthode setStrictness() ce qui est préconisé par la documentation.
+
+* utiliser du code déprécié peut entrainer des erreurs dans le futur, des problèmes de sécurité, de maintenance et de performance. Il est judicieux de remplacer des appels à des méthodes dépréciées par des méthodes plus récentes.
 
 ## Dupplication de code  
 
+* Quand on inspecte le code duppliqué dans intellij avec Analyse, on ne récupère que des "weak warnings", et quand on va regarder en détail on ne se retrouve pas réellement avec des lignes de codes duppliquées qui peuvent être supprimées. Nous en avons conclus que sur ce point là il ne semblait pas y avoir de grosses corrections possibles.
+
 ## God classes  
 
+ *  la classe Gson est une classe sur laquelle nous nous sommes penchés. c'est une classe qui contient plus de 1500 lignes de code, plus de 40 importations et plus de 30 méthodes. dans un premier temps nous avons pensé qu'il s'agissait d'une god class, mais après analyse, nous avons constaté que la classe était bien structurée et ne gérait pas trop de responsabilités. Elle s'occupe de la sérialisation et de la désérialisation de données. Les imports nombreux sont nécessaires pour la gestion des exceptions et des types de données.
+   
+ *  Une god class est identifiable par plusieurs critères : elle contient beaucoup de lignes de code, et beaucoup de dépendances. Elle gère beaucoup de responsabilités. Ce sont généralement des classes qui sont difficiles à maintenir et à comprendre.
+   
+
+* la présence d'une god class entraine des problèmes de maintenance, si elle contien beaucoup de responsabilités, il est difficile de la modifier sans impacter le reste du code et la réutilisation de cette classe est difficile car si on ne veut utiliser qu'une partie de ses fonctionnalités, on doit quand même importer toutes les dépendances, même celles qui ne nous intéressent pas. Le travail en équipe est également compliqué car il est difficile de travailler sur une classe qui contient beaucoup de responsabilités sans impacter le travail des autres.
+
+
 ## Analyse des méthodes  
+
+* la complexité cyclomatique d'une méthode est un indicateur de la complexité de la méthode. Plus la complexité cyclomatique est élevée, plus la méthode est complexe. Il est préférable de réduire la complexité cyclomatique des méthodes pour les rendre plus lisibles et plus maintenables. entre 1 et 10 la complexité est considérée comme bonne et au dessus de 10, il est préférable de réduire la complexité de la méthode.
+
+* nous avons trouver une méthode dans la classe stream.JsonReader, doPeek() qui a une complexité cyclomatique de 80. Cela s'explique par le fait que la méthode contient beaucoup de conditions imbriquées (if, else if, else, switch, case). Nous avons trouvé d'autres méthodes avec une complexité cyclomatique élevée dans cette classe comme peekNumber() qui a une complexité cyclomatique de 85 ...
+
+
+* il y a plein de manière de réduire la complexité cyclomatique d'une méthode, par exemple en divisant la méthode en plusieurs méthodes plus petites, en enlevant les imbrications de conditions, en appliquant le principe de responsabilité unique, en utilisant certains design patterns comme le pattern stratégie ou le pattern état etc.
+
+* Concernant la longueur des méthodes, plus une méthode est longue, plus elle est difficile à comprendre et à maintenir. Encore une fois, il serait préférable de diviser ces méthodes en plusieurs méthodes. Nous pouvons reprendre l'exemple de la méthode doPeek() qui contient environ 100 lignes de code.
+  
+* Pour ce qui est du nombre de paramètres, on peut considérer qu'à partir de 4-5 cela peut commence à faire trop. En effet, la méthode peut devenir difficile à comprendre, et cela peut signifier que celle-ci gère trop de responsabilité (contraire au principe de responsabilité unique).
+
+* Dans le projet on retrouve notamment dans la classe ReflectiveTypeAdaptaterFactory, la méthode "createBoundField" qui recquiert 7 arguments. Sinon le maximum dans le projet reste de 5 paramètre et cela concerne 2 methodes seulement ( getBoundField dans la classe ReflectiveTypeAdaptaterFactory ou getTypeAdaptater dans la classe JsonAdaptaterAnnotationTypeAdaptaterDactory).
+
+* Pour réduire ce nombre on peu envisager de diviser la méthode en plus petites méthodes, d'utiliser des variables de classe si ccela est possible ou encore de se tourner vers un design différent.
+  
+* avoir des méthodes qui à la fois modifient l'état de l'objet et qui retournent des informations est une mauvaise pratique. Il est préférable de séparer ces deux types de méthodes car c'est un principe de command query separation.
+
+* c'est une mauvaise pratique car une méthode ne devrait faire qu'une seule chose. ce sont des methodes plus difficiles à tester et à maintenir et plus difficiles à réutiliser.
+
+* Une méthode qui renvoie un code d'erreur n'est en général pas une bonne pratique, sauf si celle ci a bien documentée la valeur de retour. Sinon cela rend la maintenance plus difficile, le code est plus diffcile à comprendre, on ne gère pas forcement les traitement des erreurs et on se retrouve avec des nombres magiques.
+
+* on peut citer dans le projet la méthode nextNonWhitespace() dans la classe stream.JsonReader à la ligne 1445. Celle-ci renvoie la valeur -1.
+
+* Pour corriger cela on pourrait par exemple utiliser des exceptions ou être sur d'avoir une bonne gestion d'erreurs cohérente et compréhesible.
 
 
 # Nettoyage de Code et Code smells  
@@ -155,36 +194,19 @@ il y a 3372 assertions.
 * Ces nombre pourraient être remplacées par des constantes initialisées au début de la classe.
 
 ## Structure du code  
+  
+* Dans le package java.com.google.gson.internal.sql, on retrouve beaucoup de problèmes en terme de structure de code. Pour en citer quelques-uns, dans la classe LinkedTreeMap ligne 448 et 449, on retrouve deux attributs privés entre deux méthodes publiques de la classe (entrySet et keySet). On a également dans une majorité des classes de ce package comme LazilyParsedNUmber (ligne 40 asBigDecimal) ou LinkedTreeMap (ligne 424 rotateRight) , les méthodes privées qui sont entremélées entre les méthodes publique.
 
+* Cela nuit à la lisibilité du code, la maintenabilité et le compréhension, car la structure n'est pas claire et cohérente partout. IL serait préférable de regrouper les définition d'attributs en début de classe, et les méthodes privées en fin de classe.
+  
 ## Code mort  
 
 * Nous avons pu trouver du code mort : la fonction "excluder" à la ligne 417 de la classe Gson.Java , celle-ci n'est appelé nulle part et pourrait donc être supprimée afin de nettoyer encore plus le code et le rendre plus lisible. De plus il est Deprecated (obsolète), raison de plus pour le supprimer. Celui-ci est testé.
 
+* Pour en citer d'autres, on trouve dans la classes internal.sql.GsonTypes de nombreuses méthodes comme toString ligne 569 et une autre ligne 675 ou encore hashCode ligne 669 qui ne sont pas appelés nul part. Il y a également la méthode JavaVersion dans la classse internal.sql.JavaVersion qui n'implémente aucun code et qui n'est appelé nul part. Il faut faire attention pour voir si ils sont supprimables qu'ils ne soient pas la parce  que la classe implémente une interface et doit les redéfinir. Cependant dans les redéfinitions de méthodes obligatoires mais jamais appelées en internes, certaines implémente des lignes de codes non necéssaires puisque jamais appelé.
 
-# REMARQUES 
-
-magic number : JsonPrimitive : ligne 260, 265, 269 (à remplacer avec des constantes)
-
-code commenté : TypeAdapter : ligne 250 à 290 (à supprimer)
-                TypeAdapterFactory : partout (à supprimer)
+* Il faut également nettoyer les tests si on supprime des bouts de code.
+* Enlever tous ces morceaux de code mort permettra de réduire la taille du code et ainsi le rendre plus lisible et compréhensible, cela permet également de réduire sur des gros projets les temps de compilation.
 
 
 
-
-
-
-
-attention : 
-methodes publiques dans methodes privées
-probleme nom methodes att (exemple convention majuscules att statiques tt ca)
-couverture test
-couverture docs 
-code commentée ?
-methodes mal commentes qu'on comprend pas
-readme peut etre developpee
-nom des methodes/classes/packages pas explicites
-nombres magiques 
-noms de variables pas explicites
-classe trop grande
-regarder si des methodes annotees avec @Deprecated sont encore utilisees et les remplacer par ce qui est écrits dans la doc de cette annotation
-doc non pertinente
